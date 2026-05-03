@@ -87,6 +87,21 @@ npx skills add alexandrebouchez/dougs-skills
 
 This works for any agent supporting the [Agent Skills specification](https://agentskills.io) — Claude Code, OpenCode, Cursor, etc.
 
+### Method 4 — Claude Cowork (Desktop UI)
+
+In the Claude Desktop app:
+
+1. Click the **Cowork** tab (mode selector at the top)
+2. Click **Customize** in the left sidebar
+3. Click **Browse plugins** → **Personal**
+4. Click the **+** button → **Add marketplace from GitHub**
+5. Enter the URL: `https://github.com/alexandrebouchez/dougs-skills`
+6. Install the `dougs` plugin
+
+The skill activates automatically. If it doesn't appear after install (known issue [#39400](https://github.com/anthropics/claude-code/issues/39400) on marketplace mounting in some Cowork builds), upload the `plugin/` folder as a zip via the same Browse plugins screen.
+
+CLI equivalent (works identically in Cowork): same as [Method 1](#method-1--claude-code-marketplace-standard).
+
 ## Configuration
 
 Configuration lives in `.claude/dougs.local.md` per project (gitignored). The wizard creates it for you. Manual setup:
