@@ -1,7 +1,16 @@
-
 # Refresh Dougs session cookie
 
 Extrait le cookie de session HttpOnly depuis un onglet Chrome connecté à `app.dougs.fr` et l'écrit dans `~/.dougs-session` (perms 0600). Toutes les autres commandes Dougs utilisent ensuite ce cookie via fetch direct (rapide).
+
+## Skip si session déjà valide
+
+Avant d'extraire un nouveau cookie, vérifier si la session actuelle fonctionne :
+
+```bash
+node "${CLAUDE_PLUGIN_ROOT}/bin/dougs.mjs" me 2>&1 | head -c 50
+```
+
+Si la commande retourne un JSON contenant `"profile"` (exit 0), la session est encore valide. Demander à l'utilisateur s'il veut quand même renouveler avant de continuer. Si exit 3 (`SESSION_EXPIRED`) ou erreur, procéder à l'extraction.
 
 ## Prérequis
 

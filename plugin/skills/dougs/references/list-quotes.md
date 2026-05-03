@@ -1,4 +1,3 @@
-
 # Lister les devis
 
 ## Exécution

@@ -239,9 +239,9 @@ Des pénalités de retard au taux de 3 fois le taux d'intérêt légal seront ap
   await ensureGitignore(cwd);
 
   console.log('\nNext steps:');
-  console.log('  1. In Claude Code, run /dougs:refresh-session to extract your Dougs cookie.');
-  console.log('  2. Then /dougs:list-quotes to verify everything works.');
-  console.log('  3. /dougs:create-quote to create your first draft.\n');
+  console.log('  1. In Claude Code, run /dougs refresh-session to extract your Dougs cookie.');
+  console.log('  2. Then /dougs list-quotes to verify everything works.');
+  console.log('  3. /dougs create-quote to create your first draft.\n');
 
   close();
 }

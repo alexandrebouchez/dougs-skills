@@ -1,4 +1,3 @@
-
 # Éditer un devis
 
 Modifie un brouillon (DRAFT) ou un devis émis (PENDING). **Refuse les devis FINALIZED** (signés, verrouillés). Le PUT préserve le statut existant — pas de promotion DRAFT → PENDING déclenchée par cette commande.

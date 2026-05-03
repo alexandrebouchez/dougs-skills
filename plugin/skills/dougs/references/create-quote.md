@@ -1,4 +1,3 @@
-
 # Créer un brouillon de devis
 
 Cette commande crée un **brouillon (DRAFT)** dans Dougs. Le brouillon apparaît dans la section *Brouillons* de l'UI Dougs et reste modifiable. **Le plugin n'émet jamais le devis automatiquement** — c'est à l'utilisateur de cliquer sur « Émettre » / « Finaliser » dans l'UI quand il est prêt à l'envoyer au client.

@@ -8,7 +8,8 @@ description: >
   'créer un devis', 'nouveau devis', 'modifier un devis', 'éditer un devis', 'télécharger un devis',
   'établir un devis', 'préparer un devis', 'devis client', 'devis pour [client]',
   'facturer un client', 'générer un PDF de devis', 'liste mes devis', 'mes clients Dougs',
-  'comptabilité Dougs', ou toute action liée à la gestion de devis.
+  'comptabilité Dougs', 'draft invoice', 'draft estimate', 'create estimate', 'billing draft',
+  'French accounting', 'send quote to client', ou toute action liée à la gestion de devis.
 ---
 
 # Dougs — Gestion des brouillons de devis
@@ -28,6 +29,8 @@ Vérifier dans cet ordre :
 
 Une fois les deux gates passés, router vers l'action demandée.
 
+**Anti-boucle** : si `refresh-session` échoue 2 fois consécutivement (cookie collé invalide ou Chrome non authentifié), arrêter et demander à l'utilisateur de vérifier qu'il a bien un onglet `app.dougs.fr` ouvert et connecté avant de retenter. Ne jamais retry à l'infini.
+
 ## Principe brouillon-only
 
 Le plugin crée et modifie uniquement des **brouillons (DRAFT)**. Les transitions `DRAFT → PENDING` (émission) et `PENDING → FINALIZED` (validation/signature) restent manuelles dans l'UI Dougs — l'utilisateur garde toujours la main sur ces étapes engageantes.
@@ -44,16 +47,21 @@ L'utilisateur invoque `/dougs <argument>`. Trois cas :
 
    | Intention détectée | Action à charger |
    |---|---|
+   | "help / aide / ? / menu / commands / que peux-tu faire" | **afficher la table des actions** (cas 1, aucun argument) |
    | "créer / nouveau / établir / préparer un devis" | `create-quote` |
    | "modifier / éditer / changer un devis" | `edit-quote` |
-   | "lister / voir / afficher les devis" | `list-quotes` |
-   | "détail / info sur le devis [X]" | `view-quote` |
+   | "lister / afficher les devis" (pas de "client") | `list-quotes` |
+   | "voir / détail / info sur le devis [X]" (avec un identifiant) | `view-quote` |
    | "télécharger le PDF / récupérer le devis" | `download-quote` |
-   | "liste / lister les clients" | `list-customers` |
+   | "lister / liste des clients" (mot "client" présent) | `list-customers` |
    | "renouveler la session / cookie expiré / reconnecter" | `refresh-session` |
    | "configurer / installer / setup Dougs" | `setup` |
+   | "finaliser / émettre / valider / signer / envoyer un devis" | **REFUS explicite** — rappeler le guardrail #4 et rediriger vers l'UI Dougs (`https://app.dougs.fr` → bouton « Émettre » ou « Finaliser »). Le plugin ne fait jamais cette action. |
+   | "supprimer / annuler / delete un devis" | **REFUS explicite** — DELETE est blacklisté (guardrail #2). Action manuelle dans l'UI Dougs si nécessaire. |
 
-   Si l'intention est ambiguë, demander à l'utilisateur de préciser.
+   **Désambiguïsation `liste`** : seul, le mot « liste » est ambigu (devis vs clients). Si le terme « client(s) » est présent → `list-customers`. Sinon, par défaut → `list-quotes`. En cas de doute persistant, demander à l'utilisateur de préciser.
+
+   Si l'intention reste ambiguë après ce mapping, demander à l'utilisateur de choisir une action de la table.
 
 ## Actions disponibles
 

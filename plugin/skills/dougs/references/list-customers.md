@@ -1,4 +1,3 @@
-
 # Lister les clients
 
 Lecture seule — affiche les clients enregistrés dans Dougs. Utilisé principalement par `/dougs create-quote` pour autocompléter le client cible.

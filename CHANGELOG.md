@@ -17,6 +17,9 @@ All notable changes to this project are documented here. Format: [Keep a Changel
 ### Added
 - Setup gates in `SKILL.md`: the plugin checks `.claude/dougs.local.md` and `~/.dougs-session` before any action.
 - Routing table in `SKILL.md` mapping natural-language intents to actions.
+- Explicit refusal mappings for `finalize/émettre/valider` and `supprimer/delete` verbs (redirected to UI Dougs / blocked by guardrail).
+- Anti-loop protection on `refresh-session` (max 2 retries before asking the user to verify their Chrome tab).
+- `keywords` enriched in `plugin.json` for better discoverability via `npx skills find` (added `brouillon-only`, `france`, `french-accounting`, `agent-skills`).
 
 ## [0.1.0] — 2026-05-04
 

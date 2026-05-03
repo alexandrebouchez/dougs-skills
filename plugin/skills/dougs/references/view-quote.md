@@ -1,4 +1,3 @@
-
 # Voir un devis
 
 Lecture seule — affiche le détail d'un devis (DRAFT, PENDING ou FINALIZED). Pour les brouillons (DRAFT), le CLI bascule automatiquement sur `/quote-drafts/{uuid}` car `/quotes/{uuid}` ne les retourne pas.

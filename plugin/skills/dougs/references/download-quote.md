@@ -1,4 +1,3 @@
-
 # Télécharger un devis PDF
 
 Lecture seule — télécharge le PDF d'un devis émis. Le PDF est généré par Dougs uniquement après émission (PENDING ou FINALIZED) ; un brouillon (DRAFT) n'a pas de PDF disponible.

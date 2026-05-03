@@ -23,9 +23,9 @@ The wizard:
 In Claude Code:
 
 ```
-/dougs:refresh-session    # extract Dougs session cookie from your authenticated Chrome tab
-/dougs:list-quotes        # smoke test
-/dougs:create-quote       # create your first draft
+/dougs refresh-session    # extract Dougs session cookie from your authenticated Chrome tab
+/dougs list-quotes        # smoke test
+/dougs create-quote       # create your first draft
 ```
 
 ## See also

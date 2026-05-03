@@ -20,7 +20,7 @@ npx @drivenlabs/dougs
 /dougs create-quote        # create a draft
 ```
 
-> **Note.** The npm package `@drivenlabs/dougs` is published shortly after the GitHub repo goes public. If `npx` returns 404, use the manual setup (see [Configuration](#configuration)) — the marketplace install in step 1 still works.
+> **Note.** The npm wizard `@drivenlabs/dougs` ships in a follow-up. If `npx @drivenlabs/dougs` returns 404, the marketplace install in step 1 already works — fall back to the manual setup ([Configuration](#configuration)) for the company info file.
 
 ## Usage
 
@@ -141,7 +141,7 @@ The plugin and wizard run on Node 18+ on macOS, Linux and Windows. CRLF line end
 
 Dougs has no public API key. Auth uses an HttpOnly session cookie set by Google SSO.
 
-`/dougs:refresh-session` extracts the cookie from an authenticated Chrome tab on `app.dougs.fr`. Two methods:
+`/dougs refresh-session` extracts the cookie from an authenticated Chrome tab on `app.dougs.fr`. Two methods:
 
 | Method | Requirements | Steps |
 |--------|--------------|-------|
@@ -210,7 +210,7 @@ The session cookie at `~/.dougs-session` is mode `0600` (user read/write only). 
 
 ### `SESSION_EXPIRED` (exit code 3)
 
-Run `/dougs:refresh-session` to re-extract the session cookie. The cookie expires after some hours of inactivity.
+Run `/dougs refresh-session` to re-extract the session cookie. The cookie expires after some hours of inactivity.
 
 ### `Dougs not configured`
 
