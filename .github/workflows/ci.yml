@@ -25,6 +25,7 @@ jobs:
 
       - name: Run tests
         working-directory: ./plugin
+        shell: bash
         run: node --test tests/*.test.mjs
 
       - name: Smoke-test wizard (non-TTY)
