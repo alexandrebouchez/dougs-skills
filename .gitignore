@@ -1,0 +1,21 @@
+# Node
+node_modules/
+.npm
+*.tgz
+
+# Claude Code local config (per-project, contains secrets/legal info)
+.claude/*.local.md
+.claude/*.local.json
+
+# OS
+.DS_Store
+
+# Editor
+.idea/
+.vscode/
+
+# Test artifacts
+/tmp/dougs-*.json
+
+# Session cookie (never commit)
+.dougs-session

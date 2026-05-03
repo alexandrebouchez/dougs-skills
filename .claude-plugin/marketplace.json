@@ -1,0 +1,17 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "dougs-skills",
+  "description": "Dougs quote management plugin for Claude Code — manage Dougs draft quotes from your terminal",
+  "owner": {
+    "name": "Alexandre Bouchez",
+    "url": "https://github.com/alexandrebouchez"
+  },
+  "plugins": [
+    {
+      "name": "dougs",
+      "description": "Manage Dougs draft quotes via direct fetch + session cookie. Brouillon-only, no auto-finalization.",
+      "version": "0.1.0",
+      "source": "./plugin"
+    }
+  ]
+}
