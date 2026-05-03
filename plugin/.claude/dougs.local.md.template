@@ -1,5 +1,5 @@
 ---
-company_id: "YOUR_DOUGS_COMPANY_ID"
+company_id: "REPLACE_WITH_NUMERIC_ID"
 default_vat_rate: 0.2
 default_unit: "unité"
 default_expiration_days: 30
@@ -9,7 +9,7 @@ default_expiration_days: 30
 
 Copy this file to `.claude/dougs.local.md` in your project root, then fill in your company info.
 
-To find your `company_id`: log into app.dougs.fr, the URL contains `/c/<ID>/...` — that's your company_id.
+`company_id` must be a numeric ID (string-quoted). Find it by logging into app.dougs.fr — the URL contains `/c/<ID>/...`. That number is your `company_id` (e.g. `"123456"`).
 
 The sections below populate the footer/header of your quotes (legal mentions, contact, payment terms). Edit them to match your company.
 

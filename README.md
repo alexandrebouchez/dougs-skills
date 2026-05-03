@@ -110,7 +110,7 @@ dougs-skills/
 │   ├── lib/{auth,api,config,defaults,guardrails,validators}.mjs
 │   ├── bin/dougs.mjs                   # CLI dispatcher
 │   ├── commands/                       # slash commands (legacy markdown format)
-│   ├── skills/dougs/skill.md           # main skill
+│   ├── skills/dougs/SKILL.md           # main skill
 │   ├── scripts/                        # build/validate quote payload
 │   └── tests/                          # node:test
 └── init/                               # @drivenlabs/dougs npm package

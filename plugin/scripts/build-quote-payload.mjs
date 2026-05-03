@@ -13,6 +13,7 @@
 
 import { loadDefaults, DEFAULT_LINE } from '../lib/defaults.mjs';
 import { validateQuotePayload } from '../lib/validators.mjs';
+import { readStdin } from '../lib/stdin.mjs';
 
 const DEFAULTS = loadDefaults();
 
@@ -157,24 +158,6 @@ function pickDefined(obj, keys) {
     }
   }
   return result;
-}
-
-/**
- * Reads all of stdin as a string.
- */
-function readStdin() {
-  return new Promise((resolve, reject) => {
-    const chunks = [];
-    process.stdin.setEncoding('utf8');
-    process.stdin.on('data', (chunk) => chunks.push(chunk));
-    process.stdin.on('end', () => resolve(chunks.join('')));
-    process.stdin.on('error', reject);
-
-    // If stdin is a TTY (no pipe), resolve immediately with empty string
-    if (process.stdin.isTTY) {
-      resolve('');
-    }
-  });
 }
 
 main();

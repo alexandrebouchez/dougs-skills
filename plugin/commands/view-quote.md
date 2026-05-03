@@ -5,6 +5,8 @@ argument-hint: "<quote-id ou numéro>"
 
 # Voir un devis
 
+Lecture seule — affiche le détail d'un devis (DRAFT, PENDING ou FINALIZED). Pour les brouillons (DRAFT), le CLI bascule automatiquement sur `/quote-drafts/{uuid}` car `/quotes/{uuid}` ne les retourne pas.
+
 ## Identifier le devis
 
 L'utilisateur peut fournir un UUID, un numéro (ex: "41"), ou une description. Si pas un UUID, lister d'abord les devis (`/dougs:list-quotes`) et trouver l'UUID correspondant.

@@ -31,7 +31,7 @@ Si arguments incomplets, demander :
 
 ```bash
 node "${CLAUDE_PLUGIN_ROOT}/bin/dougs.mjs" create-draft > /tmp/dougs-draft-stub.json
-DRAFT_ID=$(node -e 'console.log(require("/tmp/dougs-draft-stub.json").id)')
+DRAFT_ID=$(node -e 'console.log(JSON.parse(require("node:fs").readFileSync("/tmp/dougs-draft-stub.json","utf8")).id)')
 echo "Draft créé : $DRAFT_ID"
 ```
 
@@ -85,9 +85,9 @@ Merger draft pré-rempli + input utilisateur. **Important** : forcer `status: 'D
 
 ```bash
 node -e '
-const fs = require("fs");
-const draft = JSON.parse(fs.readFileSync("/tmp/dougs-draft-full.json"));
-const input = JSON.parse(fs.readFileSync("/tmp/dougs-input.json"));
+const fs = require("node:fs");
+const draft = JSON.parse(fs.readFileSync("/tmp/dougs-draft-full.json", "utf8"));
+const input = JSON.parse(fs.readFileSync("/tmp/dougs-input.json", "utf8"));
 const merged = {
   ...draft,
   ...input,

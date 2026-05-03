@@ -31,7 +31,7 @@ fi
 ## Étape 2 — Vérifier le statut
 
 ```bash
-STATUS=$(node -e 'console.log(require("/tmp/dougs-quote.json").status)')
+STATUS=$(node -e 'console.log(JSON.parse(require("node:fs").readFileSync("/tmp/dougs-quote.json","utf8")).status)')
 echo "Statut : $STATUS"
 ```
 
@@ -55,8 +55,8 @@ Exemple — ajouter une ligne :
 
 ```bash
 node -e '
-const fs = require("fs");
-const q = JSON.parse(fs.readFileSync("/tmp/dougs-quote.json"));
+const fs = require("node:fs");
+const q = JSON.parse(fs.readFileSync("/tmp/dougs-quote.json", "utf8"));
 q.lines.push({
   title: "Nouveau service",
   description: "",

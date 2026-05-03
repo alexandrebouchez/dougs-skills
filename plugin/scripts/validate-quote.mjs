@@ -11,6 +11,7 @@
  */
 
 import { validateQuotePayload } from '../lib/validators.mjs';
+import { readStdin } from '../lib/stdin.mjs';
 
 async function main() {
   const rawInput = await readStdin();
@@ -38,23 +39,6 @@ async function main() {
     result.errors.forEach((err) => process.stderr.write(`  - ${err}\n`));
     process.exit(1);
   }
-}
-
-/**
- * Reads all of stdin as a string.
- */
-function readStdin() {
-  return new Promise((resolve, reject) => {
-    const chunks = [];
-    process.stdin.setEncoding('utf8');
-    process.stdin.on('data', (chunk) => chunks.push(chunk));
-    process.stdin.on('end', () => resolve(chunks.join('')));
-    process.stdin.on('error', reject);
-
-    if (process.stdin.isTTY) {
-      resolve('');
-    }
-  });
 }
 
 main();
