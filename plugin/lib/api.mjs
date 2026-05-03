@@ -29,7 +29,7 @@ export async function dougsFetch(method, path, body = null) {
 
   const cookie = loadCookie();
   if (!cookie) {
-    throw new SessionExpiredError('No session — run /dougs:refresh-session');
+    throw new SessionExpiredError('No session — run /dougs refresh-session');
   }
 
   const opts = {

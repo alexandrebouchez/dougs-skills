@@ -1,7 +1,3 @@
----
-description: "Configurer le plugin Dougs (company ID, defaults, infos légales)"
-argument-hint: ""
----
 
 # Setup Dougs
 
@@ -28,7 +24,7 @@ Puis éditer `.claude/dougs.local.md` et remplir `company_id`, infos légales et
 
 ## Initialiser la session
 
-Une fois la config en place, lancer `/dougs:refresh-session` pour extraire le cookie de session depuis l'onglet Chrome authentifié sur `app.dougs.fr`.
+Une fois la config en place, lancer `/dougs refresh-session` pour extraire le cookie de session depuis l'onglet Chrome authentifié sur `app.dougs.fr`.
 
 ## Vérifier
 
@@ -36,11 +32,11 @@ Une fois la config en place, lancer `/dougs:refresh-session` pour extraire le co
 node "${CLAUDE_PLUGIN_ROOT}/bin/dougs.mjs" me --pretty
 ```
 
-Doit afficher l'email connecté et `preferredCompanyId`. Si `SESSION_EXPIRED` → lancer `/dougs:refresh-session`.
+Doit afficher l'email connecté et `preferredCompanyId`. Si `SESSION_EXPIRED` → lancer `/dougs refresh-session`.
 
 ## Confirmer
 
 ```
 Dougs configuré : [EMAIL] | Company [ID]
-Plugin prêt — utilise /dougs:list-quotes, /dougs:create-quote, etc.
+Plugin prêt — utilise /dougs list-quotes, /dougs create-quote, etc.
 ```

@@ -2,8 +2,8 @@
 name: dougs
 description: >
   Gestion des brouillons de devis Dougs (comptabilité en ligne française). Créer, éditer,
-  visualiser, télécharger. Brouillon-only — l'émission et la validation restent manuelles
-  dans l'UI Dougs.
+  visualiser, télécharger, lister. Brouillon-only — l'émission et la validation restent
+  manuelles dans l'UI Dougs.
   Activé quand l'utilisateur mentionne 'dougs', 'devis', 'brouillon', 'quote', 'facturation',
   'créer un devis', 'nouveau devis', 'modifier un devis', 'éditer un devis', 'télécharger un devis',
   'établir un devis', 'préparer un devis', 'devis client', 'devis pour [client]',
@@ -17,25 +17,56 @@ description: >
 
 Plugin basé sur fetch direct vers l'API interne de Dougs, avec un cookie de session extrait depuis un onglet Chrome authentifié (Google SSO). Aucun appel temps réel ne passe par Chrome MCP — uniquement l'extraction initiale du cookie.
 
-**Principe brouillon-only** : le plugin crée et modifie uniquement des **brouillons (DRAFT)**. Les transitions `DRAFT → PENDING` (émission) et `PENDING → FINALIZED` (validation/signature) restent manuelles dans l'UI Dougs — l'utilisateur garde toujours la main sur ces étapes engageantes.
+## Setup gates (avant toute action)
 
-## Commandes disponibles
+Vérifier dans cet ordre :
 
-| Commande | Action |
-|----------|--------|
-| `/dougs:setup` | Config initiale (company_id, defaults) + indications session |
-| `/dougs:refresh-session` | Extraire/renouveler le cookie de session |
-| `/dougs:create-quote` | Créer un nouveau brouillon (DRAFT) |
-| `/dougs:edit-quote` | Modifier un brouillon (DRAFT) ou un devis émis (PENDING — avec avertissement explicite) |
-| `/dougs:list-quotes` | Lister les devis émis (DRAFT exclus de cette liste) |
-| `/dougs:view-quote` | Voir le détail d'un devis |
-| `/dougs:download-quote` | Télécharger le PDF d'un devis (PENDING ou FINALIZED) |
-| `/dougs:list-customers` | Lister les clients |
+1. **Config présente** : `.claude/dougs.local.md` existe (le CLI walks up depuis cwd).
+   - Si absent → guider vers le setup : exécuter `references/setup.md` (proposer `npx @drivenlabs/dougs` ou setup manuel).
+2. **Session active** : `~/.dougs-session` existe et n'est pas vide.
+   - Si absent ou si une commande renvoie exit 3 (`SESSION_EXPIRED`) → exécuter `references/refresh-session.md`.
 
-## Hors scope
+Une fois les deux gates passés, router vers l'action demandée.
 
-- **Émettre / Finaliser** un brouillon (`finalize()` côté Dougs) : action engageante (validation comme signé, irréversible côté FINALIZED, génération PDF). Toujours faite par l'utilisateur dans l'UI Dougs (`https://app.dougs.fr`).
-- **Envoi par email** : utiliser `/dougs:download-quote` puis envoyer le PDF avec l'outil mail de votre choix.
+## Principe brouillon-only
+
+Le plugin crée et modifie uniquement des **brouillons (DRAFT)**. Les transitions `DRAFT → PENDING` (émission) et `PENDING → FINALIZED` (validation/signature) restent manuelles dans l'UI Dougs — l'utilisateur garde toujours la main sur ces étapes engageantes.
+
+## Routing rules
+
+L'utilisateur invoque `/dougs <argument>`. Trois cas :
+
+1. **Aucun argument** → afficher la table des actions ci-dessous et demander quelle action exécuter.
+
+2. **Premier mot = nom d'action** → charger la référence correspondante via `Read` sur `${CLAUDE_PLUGIN_ROOT}/skills/dougs/references/<action>.md`. Tout texte après le nom d'action est passé en contexte à la référence.
+
+3. **Premier mot ≠ nom d'action** → inférer l'intention. Mapping :
+
+   | Intention détectée | Action à charger |
+   |---|---|
+   | "créer / nouveau / établir / préparer un devis" | `create-quote` |
+   | "modifier / éditer / changer un devis" | `edit-quote` |
+   | "lister / voir / afficher les devis" | `list-quotes` |
+   | "détail / info sur le devis [X]" | `view-quote` |
+   | "télécharger le PDF / récupérer le devis" | `download-quote` |
+   | "liste / lister les clients" | `list-customers` |
+   | "renouveler la session / cookie expiré / reconnecter" | `refresh-session` |
+   | "configurer / installer / setup Dougs" | `setup` |
+
+   Si l'intention est ambiguë, demander à l'utilisateur de préciser.
+
+## Actions disponibles
+
+| Action | Référence | Description |
+|--------|-----------|-------------|
+| `setup` | `references/setup.md` | Configurer le plugin (company_id, defaults, infos légales) |
+| `refresh-session` | `references/refresh-session.md` | Extraire/renouveler le cookie de session |
+| `create-quote` | `references/create-quote.md` | Créer un nouveau brouillon (DRAFT) |
+| `edit-quote` | `references/edit-quote.md` | Modifier un brouillon (DRAFT) ou un devis émis (PENDING — avec avertissement) |
+| `list-quotes` | `references/list-quotes.md` | Lister les devis émis (DRAFT exclus de cette liste) |
+| `view-quote` | `references/view-quote.md` | Voir le détail d'un devis |
+| `download-quote` | `references/download-quote.md` | Télécharger le PDF d'un devis (PENDING ou FINALIZED) |
+| `list-customers` | `references/list-customers.md` | Lister les clients |
 
 ## Statuts Dougs
 
@@ -59,14 +90,14 @@ L'API Dougs distingue trois statuts :
 
 L'API Dougs n'expose pas de clé d'API. L'auth repose sur un cookie HttpOnly (Google SSO).
 
-**Setup unique** : `/dougs:refresh-session` extrait le cookie depuis un onglet Chrome connecté à `app.dougs.fr`. Le cookie est stocké dans `~/.dougs-session` (perms 0600).
+**Setup unique** : action `refresh-session` extrait le cookie depuis un onglet Chrome connecté à `app.dougs.fr`. Le cookie est stocké dans `~/.dougs-session` (perms 0600).
 
 **Workflow par appel** :
 
 1. Le CLI `bin/dougs.mjs` lit `~/.dougs-session`
 2. Envoie un fetch HTTP avec le header `Cookie`
 3. Si 401 → exit code 3, message `SESSION_EXPIRED`
-4. Le skill propose alors `/dougs:refresh-session` puis retry
+4. Le skill propose alors d'exécuter `refresh-session` puis retry
 
 ## Guardrails de sécurité
 
@@ -89,7 +120,7 @@ L'API Dougs n'expose pas de clé d'API. L'auth repose sur un cookie HttpOnly (Go
 | 0 | Succès |
 | 1 | Erreur générique (payload invalide, ressource introuvable, Dougs 4xx/5xx) |
 | 2 | Mauvais usage CLI (commande inconnue, args manquants) |
-| 3 | `SESSION_EXPIRED` — relancer `/dougs:refresh-session` |
+| 3 | `SESSION_EXPIRED` — exécuter `refresh-session` |
 
 ## Configuration locale
 

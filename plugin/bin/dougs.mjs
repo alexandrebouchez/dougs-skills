@@ -7,7 +7,7 @@
  *   0 — success
  *   1 — generic error (4xx/5xx Dougs, payload invalide)
  *   2 — usage CLI invalide (commande inconnue, args manquants)
- *   3 — SESSION_EXPIRED (relancer /dougs:refresh-session)
+ *   3 — SESSION_EXPIRED (relancer /dougs refresh-session)
  */
 
 import { writeFileSync } from 'node:fs';

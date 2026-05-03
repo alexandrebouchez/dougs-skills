@@ -15,25 +15,41 @@ claude plugin install dougs@dougs-skills --scope user
 npx @drivenlabs/dougs
 
 # 3. In Claude Code
-/dougs:refresh-session     # extract Dougs session cookie from authenticated Chrome tab
-/dougs:list-quotes         # smoke test
-/dougs:create-quote        # create a draft
+/dougs refresh-session     # extract Dougs session cookie from authenticated Chrome tab
+/dougs list-quotes         # smoke test
+/dougs create-quote        # create a draft
 ```
 
 > **Note.** The npm package `@drivenlabs/dougs` is published shortly after the GitHub repo goes public. If `npx` returns 404, use the manual setup (see [Configuration](#configuration)) — the marketplace install in step 1 still works.
 
-## Commands
+## Usage
 
-| Command | Action |
-|---------|--------|
-| `/dougs:setup` | Initial config (company_id, defaults, legal info) |
-| `/dougs:refresh-session` | Extract/refresh Dougs session cookie |
-| `/dougs:create-quote` | Create a new draft (DRAFT) |
-| `/dougs:edit-quote` | Modify a draft, or an issued quote (PENDING — with explicit warning) |
-| `/dougs:list-quotes` | List issued quotes |
-| `/dougs:view-quote` | Show full quote detail |
-| `/dougs:download-quote` | Download a quote PDF |
-| `/dougs:list-customers` | List customers |
+A single slash command, `/dougs`, dispatches to the right action based on the argument or your natural-language intent. The plugin reads `skills/dougs/SKILL.md` for routing rules and loads `skills/dougs/references/<action>.md` on demand.
+
+### Actions
+
+| Action | Description |
+|--------|-------------|
+| `/dougs setup` | Configure the plugin (company_id, defaults, legal info) |
+| `/dougs refresh-session` | Extract/refresh Dougs session cookie |
+| `/dougs create-quote` | Create a new draft (DRAFT) |
+| `/dougs edit-quote` | Modify a draft, or an issued quote (PENDING — with explicit warning) |
+| `/dougs list-quotes` | List issued quotes (DRAFT excluded) |
+| `/dougs view-quote <id>` | Show full quote detail |
+| `/dougs download-quote <id>` | Download a quote PDF |
+| `/dougs list-customers` | List customers |
+
+### Natural language
+
+You can also invoke the plugin with intent rather than action names. The skill infers the action:
+
+```
+/dougs crée un devis pour Acme SARL
+/dougs donne-moi la liste de mes devis
+/dougs télécharge le PDF du dernier devis
+```
+
+See the routing table in `skills/dougs/SKILL.md`.
 
 ## Brouillon-only philosophy
 
@@ -154,10 +170,11 @@ dougs-skills/
 │   ├── .claude/dougs.local.md.template
 │   ├── lib/                            # auth, api, config, defaults, guardrails, validators, stdin
 │   ├── bin/dougs.mjs                   # CLI dispatcher (me, list-quotes, create-draft, …)
-│   ├── commands/                       # 8 slash command markdowns
-│   ├── skills/dougs/SKILL.md           # main skill
+│   ├── commands/dougs.md               # one slash command (`/dougs`) — dispatcher only
+│   ├── skills/dougs/SKILL.md           # main skill: routing rules, doctrine, action menu
+│   ├── skills/dougs/references/        # 8 action references (load-on-demand)
 │   ├── scripts/                        # build-quote-payload, validate-quote
-│   └── tests/                          # node:test, 25 cases
+│   └── tests/                          # node:test, 31 cases
 └── init/                               # @drivenlabs/dougs npm package (zero-dep wizard)
     ├── package.json
     └── bin/cli.mjs

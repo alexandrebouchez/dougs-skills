@@ -1,7 +1,3 @@
----
-description: "Télécharger le PDF d'un devis"
-argument-hint: "<quote-id ou numéro> [--out /chemin/sortie.pdf]"
----
 
 # Télécharger un devis PDF
 
@@ -32,4 +28,4 @@ Le CLI répond `ERROR: Pas de PDF disponible (devis non finalisé ?)`. Le devis 
 
 ## Si SESSION_EXPIRED
 
-Inviter l'utilisateur à lancer `/dougs:refresh-session`.
+Inviter l'utilisateur à lancer `/dougs refresh-session`.

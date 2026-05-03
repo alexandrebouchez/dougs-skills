@@ -1,6 +1,6 @@
 /**
  * Session cookie helpers for Dougs API.
- * Cookie is stored at ~/.dougs-session (perms 0600), refreshed via /dougs:refresh-session.
+ * Cookie is stored at ~/.dougs-session (perms 0600), refreshed via /dougs refresh-session.
  */
 
 import { readFileSync, writeFileSync, existsSync, chmodSync } from 'node:fs';
@@ -27,7 +27,7 @@ export function saveCookie(cookie) {
 }
 
 export class SessionExpiredError extends Error {
-  constructor(message = 'Session Dougs expirée — relance /dougs:refresh-session') {
+  constructor(message = 'Session Dougs expirée — relance /dougs refresh-session') {
     super(message);
     this.name = 'SessionExpiredError';
   }

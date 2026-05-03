@@ -1,7 +1,3 @@
----
-description: "Extraire/renouveler le cookie de session Dougs depuis un onglet Chrome authentifié"
-argument-hint: ""
----
 
 # Refresh Dougs session cookie
 

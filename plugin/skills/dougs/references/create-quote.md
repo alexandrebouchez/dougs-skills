@@ -1,7 +1,3 @@
----
-description: "Créer un brouillon de devis Dougs"
-argument-hint: "[client] [--subject OBJET] [--lines JSON]"
----
 
 # Créer un brouillon de devis
 
@@ -21,7 +17,7 @@ La transition `DRAFT → PENDING` (et `PENDING → FINALIZED`) passe par un endp
 
 Si arguments incomplets, demander :
 
-1. **Client** : nom ou SIREN. `/dougs:list-customers` pour autocompléter.
+1. **Client** : nom ou SIREN. `/dougs list-customers` pour autocompléter.
 2. **Objet** : description courte.
 3. **Lignes** : titre, description, quantité (1), unité ("unité"), prix unitaire HT, taux TVA (0.2).
 4. **Date** : aujourd'hui par défaut.
@@ -149,4 +145,4 @@ Pour émettre ou finaliser : action manuelle dans l'UI Dougs.
 - Validation stricte avant PUT (`scripts/validate-quote.mjs`).
 - Confirmation utilisateur obligatoire.
 - `status: 'DRAFT'` forcé dans le payload — empêche toute promotion accidentelle.
-- Si `SESSION_EXPIRED` (exit 3) → `/dougs:refresh-session` puis recommencer.
+- Si `SESSION_EXPIRED` (exit 3) → `/dougs refresh-session` puis recommencer.

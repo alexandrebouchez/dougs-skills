@@ -9,8 +9,8 @@
   "plugins": [
     {
       "name": "dougs",
-      "description": "Manage Dougs draft quotes via direct fetch + session cookie. Brouillon-only, no auto-finalization.",
-      "version": "0.1.0",
+      "description": "Manage Dougs draft quotes via direct fetch + session cookie. Single `/dougs` command. Brouillon-only.",
+      "version": "0.2.0",
       "source": "./plugin"
     }
   ]

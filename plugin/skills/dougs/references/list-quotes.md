@@ -1,7 +1,3 @@
----
-description: "Lister les devis Dougs"
-argument-hint: "[--status pending|finalized] [--limit N]"
----
 
 # Lister les devis
 
@@ -22,11 +18,11 @@ node "${CLAUDE_PLUGIN_ROOT}/bin/dougs.mjs" list-quotes --status pending --limit 
 
 ## Note : DRAFT non listés
 
-Cette commande appelle `GET /companies/{id}/invoicing/quotes`, qui ne retourne que les devis émis (PENDING / FINALIZED). Les **brouillons (DRAFT) n'apparaissent pas** dans cette liste — pour les retrouver, ouvrir l'UI Dougs (section *Brouillons*) ou utiliser l'UUID directement avec `/dougs:edit-quote`.
+Cette commande appelle `GET /companies/{id}/invoicing/quotes`, qui ne retourne que les devis émis (PENDING / FINALIZED). Les **brouillons (DRAFT) n'apparaissent pas** dans cette liste — pour les retrouver, ouvrir l'UI Dougs (section *Brouillons*) ou utiliser l'UUID directement avec `/dougs edit-quote`.
 
 ## Si SESSION_EXPIRED
 
-Si le CLI répond `SESSION_EXPIRED` (exit 3), inviter l'utilisateur à lancer `/dougs:refresh-session` puis réessayer.
+Si le CLI répond `SESSION_EXPIRED` (exit 3), inviter l'utilisateur à lancer `/dougs refresh-session` puis réessayer.
 
 ## Affichage
 

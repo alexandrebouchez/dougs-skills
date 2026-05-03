@@ -1,7 +1,3 @@
----
-description: "Modifier un brouillon ou un devis émis (jamais un FINALIZED)"
-argument-hint: "<quote-id ou numéro> [--subject OBJET] [--add-line JSON] [--remove-line INDEX]"
----
 
 # Éditer un devis
 
@@ -9,7 +5,7 @@ Modifie un brouillon (DRAFT) ou un devis émis (PENDING). **Refuse les devis FIN
 
 ## Identifier
 
-UUID, numéro ("41"), ou description ("le devis Acme"). Si pas un UUID, lister via `/dougs:list-quotes` pour trouver l'UUID correspondant.
+UUID, numéro ("41"), ou description ("le devis Acme"). Si pas un UUID, lister via `/dougs list-quotes` pour trouver l'UUID correspondant.
 
 ## Étape 1 — Charger le devis
 
@@ -106,4 +102,4 @@ cat /tmp/dougs-payload.json | node "${CLAUDE_PLUGIN_ROOT}/bin/dougs.mjs" update-
 - Le PUT envoie l'objet COMPLET (pas de diff partiel).
 - Le `status` original est préservé (DRAFT reste DRAFT, PENDING reste PENDING).
 - Confirmation utilisateur obligatoire.
-- Si `SESSION_EXPIRED` → `/dougs:refresh-session` puis recommencer.
+- Si `SESSION_EXPIRED` → `/dougs refresh-session` puis recommencer.
