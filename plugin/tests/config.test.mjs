@@ -66,6 +66,8 @@ test('loadConfig invalidates cache when cwd changes', () => {
   process.chdir(b);
   assert.equal(loadConfig().companyId, '222');
 
+  // Move cwd out of the temp dirs before rmSync — Windows holds locks on cwd.
+  process.chdir(originalCwd);
   rmSync(a, { recursive: true, force: true });
   rmSync(b, { recursive: true, force: true });
 });

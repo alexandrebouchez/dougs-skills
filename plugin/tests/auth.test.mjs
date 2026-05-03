@@ -12,7 +12,7 @@ test('loadCookie returns null when file missing', () => {
   rmSync(dir, { recursive: true });
 });
 
-test('saveCookie writes file with 0600 perms', () => {
+test('saveCookie writes file with 0600 perms', { skip: process.platform === 'win32' }, () => {
   const dir = mkdtempSync(join(tmpdir(), 'dougs-'));
   const path = join(dir, 'session');
   process.env[SESSION_PATH_ENV] = path;
@@ -21,6 +21,15 @@ test('saveCookie writes file with 0600 perms', () => {
   assert.equal(content, 'session=abc; other=xyz');
   const mode = statSync(path).mode & 0o777;
   assert.equal(mode, 0o600);
+  rmSync(dir, { recursive: true });
+});
+
+test('saveCookie writes file content (Windows-compatible)', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'dougs-'));
+  const path = join(dir, 'session');
+  process.env[SESSION_PATH_ENV] = path;
+  saveCookie('session=abc');
+  assert.equal(readFileSync(path, 'utf8').trim(), 'session=abc');
   rmSync(dir, { recursive: true });
 });
 
