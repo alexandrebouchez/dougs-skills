@@ -9,6 +9,21 @@ import { BASE_URL, paths, loadConfig } from './config.mjs';
 
 export { SessionExpiredError };
 
+const DEFAULT_TIMEOUT_MS = 15_000;
+
+async function timedFetch(url, opts = {}) {
+  const signal = opts.signal ?? AbortSignal.timeout(DEFAULT_TIMEOUT_MS);
+  try {
+    return await fetch(url, { ...opts, signal });
+  } catch (err) {
+    if (err.name === 'TimeoutError' || err.name === 'AbortError') {
+      throw new Error(`Dougs request timed out after ${DEFAULT_TIMEOUT_MS}ms (${url})`);
+    }
+    const cause = err.cause?.message || err.message;
+    throw new Error(`Network error reaching app.dougs.fr: ${cause}`);
+  }
+}
+
 export async function dougsFetch(method, path, body = null) {
   assertSafeEndpoint(method, path);
 
@@ -29,7 +44,7 @@ export async function dougsFetch(method, path, body = null) {
     opts.body = JSON.stringify(body);
   }
 
-  const res = await fetch(BASE_URL + path, opts);
+  const res = await timedFetch(BASE_URL + path, opts);
 
   if (res.status === 401) {
     throw new SessionExpiredError();
@@ -43,7 +58,11 @@ export async function dougsFetch(method, path, body = null) {
   if (ct.includes('application/json')) {
     return res.json();
   }
-  return res;
+  // Non-JSON response on a JSON endpoint usually means Dougs returned an HTML
+  // maintenance page or an unexpected gateway response. Surface it loudly.
+  throw new Error(
+    `Dougs returned non-JSON (status ${res.status}, content-type "${ct}"). Service may be down or session expired.`,
+  );
 }
 
 // --- High-level helpers — companyId loaded from .claude/dougs.local.md ---
@@ -82,18 +101,45 @@ export function listCustomers() {
   return dougsFetch('GET', paths.customers(companyId));
 }
 
+/**
+ * Download a quote PDF. The path comes from the Dougs API (quote.file.path).
+ * Validates the path is a same-origin absolute path, follows redirects manually
+ * to ensure the session cookie never crosses origin.
+ */
 export async function downloadQuotePdf(filePath) {
-  if (typeof filePath !== 'string' || !filePath.startsWith('/') || filePath.includes('://')) {
+  if (
+    typeof filePath !== 'string' ||
+    !filePath.startsWith('/') ||
+    filePath.startsWith('//') ||
+    filePath.includes('://')
+  ) {
     throw new Error(`Invalid PDF path: ${filePath}`);
   }
   const cookie = loadCookie();
   if (!cookie) throw new SessionExpiredError();
-  const res = await fetch(BASE_URL + filePath, {
-    method: 'GET',
-    headers: { Cookie: cookie },
-    redirect: 'follow',
-  });
-  if (res.status === 401) throw new SessionExpiredError();
-  if (!res.ok) throw new Error(`PDF download failed: ${res.status}`);
-  return Buffer.from(await res.arrayBuffer());
+
+  let url = BASE_URL + filePath;
+  for (let hop = 0; hop < 5; hop++) {
+    const res = await timedFetch(url, {
+      method: 'GET',
+      headers: { Cookie: cookie },
+      redirect: 'manual',
+    });
+    if (res.status === 401) throw new SessionExpiredError();
+    if (res.status >= 300 && res.status < 400) {
+      const location = res.headers.get('location');
+      if (!location) throw new Error(`PDF redirect with no Location header (status ${res.status})`);
+      const next = new URL(location, url);
+      if (next.origin !== new URL(BASE_URL).origin) {
+        throw new Error(
+          `Refusing to follow PDF redirect to ${next.origin} (cookie stays same-origin).`,
+        );
+      }
+      url = next.toString();
+      continue;
+    }
+    if (!res.ok) throw new Error(`PDF download failed: ${res.status}`);
+    return Buffer.from(await res.arrayBuffer());
+  }
+  throw new Error('PDF download: too many redirects (>5)');
 }

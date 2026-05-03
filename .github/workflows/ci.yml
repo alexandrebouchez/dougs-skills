@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        node: ['18', '20', '22']
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Run tests
+        working-directory: ./plugin
+        run: node --test tests/*.test.mjs
+
+      - name: Smoke-test wizard (non-TTY)
+        if: matrix.os != 'windows-latest'
+        run: |
+          mkdir -p /tmp/dougs-ci-smoke
+          cd /tmp/dougs-ci-smoke
+          printf "n\n123456\n0.2\nunité\n30\nCI TEST\n\n1 rue Test\n75001 Paris\nSASU\n1000\n12345678901234\nPARIS\n123456789\n6201Z\nFR12 123456789\n+33100000000\nci@test.invalid\nn\n" \
+            | node $GITHUB_WORKSPACE/init/bin/cli.mjs
+          test -f .claude/dougs.local.md

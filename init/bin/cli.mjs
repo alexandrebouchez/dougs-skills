@@ -12,8 +12,9 @@
 import { createInterface } from 'node:readline/promises';
 import { stdin as input, stdout as output } from 'node:process';
 import { execSync } from 'node:child_process';
-import { mkdirSync, writeFileSync, existsSync, readFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { mkdirSync, writeFileSync, existsSync, readFileSync, appendFileSync } from 'node:fs';
+import { join, resolve } from 'node:path';
+import { homedir } from 'node:os';
 
 const REPO = 'alexandrebouchez/dougs-skills';
 const MARKETPLACE = 'dougs-skills';
@@ -70,8 +71,9 @@ process.on('SIGINT', () => {
 });
 
 function hasClaudeCli() {
+  if (!input.isTTY) return false; // skip in non-TTY (CI, piped) — execSync may hang or pollute output
   try {
-    execSync('claude --version', { stdio: 'ignore' });
+    execSync('claude --version', { stdio: 'ignore', timeout: 3000 });
     return true;
   } catch {
     return false;
@@ -79,15 +81,46 @@ function hasClaudeCli() {
 }
 
 function escapeQuotes(s) {
-  return String(s).replace(/"/g, '\\"');
+  return String(s).replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+}
+
+function normalizeDecimal(s) {
+  return String(s).replace(',', '.');
+}
+
+async function ensureGitignore(cwd) {
+  const giPath = join(cwd, '.gitignore');
+  const pattern = '.claude/*.local.md';
+  let current = '';
+  if (existsSync(giPath)) {
+    current = readFileSync(giPath, 'utf8');
+    if (current.split('\n').some((line) => line.trim() === pattern)) return;
+  }
+  if (await askBool(`Add "${pattern}" to .gitignore? (config contains your legal info)`, true)) {
+    const prefix = current && !current.endsWith('\n') ? '\n' : '';
+    appendFileSync(giPath, `${prefix}${pattern}\n`);
+    output.write(`✓ Added ${pattern} to .gitignore\n`);
+  }
 }
 
 async function main() {
+  const cwd = resolve(process.cwd());
+  const home = resolve(homedir());
+
   console.log('');
   console.log('  ┌──────────────────────────────────────────┐');
   console.log('  │  dougs Claude Code plugin — setup wizard │');
   console.log('  └──────────────────────────────────────────┘');
   console.log('');
+
+  if (cwd === home || cwd === resolve('/')) {
+    console.error(
+      `✗ Refusing to write config in ${cwd === home ? 'your home directory' : 'the filesystem root'}.\n` +
+        '  Run this from a project directory where you want to manage Dougs quotes.\n',
+    );
+    close();
+    process.exit(1);
+  }
 
   if (hasClaudeCli()) {
     if (await askBool('Install the dougs plugin via Claude Code marketplace?', true)) {
@@ -114,15 +147,20 @@ async function main() {
 
   console.log("Now let's configure your company info for quote generation.\n");
 
-  const companyId = await ask('Dougs company_id (URL .../c/<ID>/...)');
+  const companyId = (await ask('Dougs company_id (URL .../c/<ID>/...)')).replace(/\s+/g, '');
   if (!/^\d+$/.test(companyId)) {
-    console.error('✗ company_id must be numeric. Aborting.');
+    console.error('✗ company_id must be numeric (digits only). Aborting.');
     close();
     process.exit(1);
   }
-  const vatRate = await ask('Default VAT rate (0.2 = 20%)', '0.2');
+  const vatRate = normalizeDecimal(await ask('Default VAT rate (0.2 = 20%)', '0.2'));
+  if (!/^-?\d+(\.\d+)?$/.test(vatRate)) {
+    console.error(`✗ VAT rate must be numeric (got "${vatRate}"). Aborting.`);
+    close();
+    process.exit(1);
+  }
   const unit = await ask('Default unit', 'unité');
-  const expiration = await ask('Default quote validity (days)', '30');
+  const expiration = (await ask('Default quote validity (days)', '30')).replace(/\D/g, '') || '30';
 
   console.log('\n— Legal info (appears in quote footer) —\n');
   const legalName = await ask('Company legal name (e.g. "MY COMPANY SAS")');
@@ -139,7 +177,6 @@ async function main() {
   const phone = await ask('Phone (e.g. "+33...")');
   const email = await ask('Email');
 
-  const cwd = process.cwd();
   const dir = join(cwd, '.claude');
   const path = join(dir, 'dougs.local.md');
   if (existsSync(path)) {
@@ -197,6 +234,9 @@ Des pénalités de retard au taux de 3 fois le taux d'intérêt légal seront ap
 
   writeFileSync(path, content);
   console.log(`\n✓ Wrote ${path}`);
+
+  // Offer to add to user project's .gitignore so the file (with legal info) is not committed
+  await ensureGitignore(cwd);
 
   console.log('\nNext steps:');
   console.log('  1. In Claude Code, run /dougs:refresh-session to extract your Dougs cookie.');

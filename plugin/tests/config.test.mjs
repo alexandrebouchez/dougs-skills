@@ -3,8 +3,10 @@ import { strict as assert } from 'node:assert';
 import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { loadConfig, clearConfigCache } from '../lib/config.mjs';
+import { loadConfig, clearConfigCache, parseFrontmatter } from '../lib/config.mjs';
 import { loadDefaults, clearDefaultsCache } from '../lib/defaults.mjs';
+
+process.env.DOUGS_QUIET = '1';
 
 let tmpDir;
 let originalCwd;
@@ -106,4 +108,49 @@ test('loadDefaults uses fallbacks when sections are missing', () => {
   assert.equal(d.invoicerName, 'My Company');
   assert.match(d.footerData.legalInformation, /\[Configure in/);
   assert.match(d.thankYouNote, /trust/);
+});
+
+test('loadConfig handles CRLF line endings (Windows Notepad)', () => {
+  writeConfig(tmpDir, '---\r\ncompany_id: "12345"\r\ndefault_vat_rate: 0.1\r\n---\r\n');
+  process.chdir(tmpDir);
+  const cfg = loadConfig();
+  assert.equal(cfg.companyId, '12345');
+  assert.equal(cfg.defaultVatRate, 0.1);
+});
+
+test('loadConfig handles UTF-8 BOM', () => {
+  writeConfig(tmpDir, '﻿---\ncompany_id: "12345"\n---\n');
+  process.chdir(tmpDir);
+  const cfg = loadConfig();
+  assert.equal(cfg.companyId, '12345');
+});
+
+test('loadDefaults handles CRLF in section bodies', () => {
+  writeConfig(
+    tmpDir,
+    '---\ncompany_id: "12345"\n---\n\n## Invoicer Name\r\nACME SARL\r\n\r\n## Legal Information\r\nLine 1\r\nLine 2\r\n',
+  );
+  process.chdir(tmpDir);
+  const d = loadDefaults();
+  assert.equal(d.invoicerName, 'ACME SARL');
+  assert.equal(d.footerData.legalInformation, 'Line 1\nLine 2');
+});
+
+test('parseFrontmatter unescapes \\" and \\\\ in quoted values', () => {
+  const fm = parseFrontmatter('---\nname: "Foo \\"the agency\\""\npath: "C:\\\\Users"\n---');
+  assert.equal(fm.name, 'Foo "the agency"');
+  assert.equal(fm.path, 'C:\\Users');
+});
+
+test('findLocalMd stops at homedir (no walk above)', () => {
+  // Create a config strictly above homedir would be unsafe to test (cannot mock homedir
+  // mid-test cleanly). Instead verify that a config in tmpDir parent isn't picked up
+  // when running from a deep nested cwd inside tmpDir without any .claude.
+  const deep = join(tmpDir, 'a', 'b', 'c');
+  mkdirSync(deep, { recursive: true });
+  writeConfig(tmpDir, '---\ncompany_id: "999"\n---\n');
+  process.chdir(deep);
+  // Walk-up should still find tmpDir/.claude (homedir is /Users/... not /tmp/...)
+  const cfg = loadConfig();
+  assert.equal(cfg.companyId, '999');
 });

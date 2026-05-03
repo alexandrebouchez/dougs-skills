@@ -4,8 +4,7 @@
  * sections (## Invoicer Name, ## Legal Information, etc.).
  */
 
-import { readFileSync } from 'node:fs';
-import { loadConfig } from './config.mjs';
+import { loadConfig, readNormalizedFile } from './config.mjs';
 
 let cachedDefaults = null;
 let cachedConfigPath = null;
@@ -16,7 +15,7 @@ export function clearDefaultsCache() {
 }
 
 function readBody(path) {
-  const content = readFileSync(path, 'utf8');
+  const content = readNormalizedFile(path);
   const m = content.match(/^---\n[\s\S]*?\n---\n?([\s\S]*)$/);
   return m ? m[1].trim() : '';
 }

@@ -6,27 +6,43 @@
 
 import { readFileSync, existsSync } from 'node:fs';
 import { join, dirname, resolve } from 'node:path';
+import { homedir } from 'node:os';
 
 let cachedConfig = null;
 let cachedCwd = null;
+let lastLoggedPath = null;
 
 export function clearConfigCache() {
   cachedConfig = null;
   cachedCwd = null;
+  lastLoggedPath = null;
 }
 
 function findLocalMd(startDir = process.cwd()) {
   let dir = resolve(startDir);
   const root = resolve('/');
+  const home = resolve(homedir());
   while (dir !== root) {
     const candidate = join(dir, '.claude', 'dougs.local.md');
     if (existsSync(candidate)) return candidate;
+    if (dir === home) break; // stop at homedir — never walk above
     dir = dirname(dir);
   }
   return null;
 }
 
-function parseFrontmatter(content) {
+/**
+ * Read a UTF-8 text file with BOM and CRLF normalization.
+ * Windows editors (Notepad, etc.) commonly emit BOM + CRLF, which would otherwise
+ * silently break the frontmatter / section regexes.
+ */
+export function readNormalizedFile(path) {
+  return readFileSync(path, 'utf8')
+    .replace(/^﻿/, '')
+    .replace(/\r\n/g, '\n');
+}
+
+export function parseFrontmatter(content) {
   const match = content.match(/^---\n([\s\S]*?)\n---/);
   if (!match) return {};
   const result = {};
@@ -35,7 +51,9 @@ function parseFrontmatter(content) {
     if (!m) continue;
     let [, key, value] = m;
     value = value.trim();
-    if (value.startsWith('"') && value.endsWith('"')) value = value.slice(1, -1);
+    if (value.startsWith('"') && value.endsWith('"')) {
+      value = value.slice(1, -1).replace(/\\"/g, '"').replace(/\\\\/g, '\\');
+    }
     if (value === 'true') value = true;
     else if (value === 'false') value = false;
     else if (/^-?\d+(\.\d+)?$/.test(value)) value = parseFloat(value);
@@ -54,13 +72,19 @@ export function loadConfig() {
         'or create .claude/dougs.local.md manually (see template).',
     );
   }
-  const content = readFileSync(path, 'utf8');
+  const content = readNormalizedFile(path);
   const cfg = parseFrontmatter(content);
   if (!cfg.company_id) {
     throw new Error(
       `Missing company_id in ${path}. Run setup wizard or fix manually.`,
     );
   }
+
+  if (lastLoggedPath !== path && process.env.DOUGS_QUIET !== '1') {
+    process.stderr.write(`[dougs] Using config: ${path}\n`);
+    lastLoggedPath = path;
+  }
+
   cachedConfig = {
     companyId: String(cfg.company_id),
     defaultVatRate: cfg.default_vat_rate ?? 0.2,
@@ -71,9 +95,6 @@ export function loadConfig() {
   cachedCwd = cwd;
   return cachedConfig;
 }
-
-// Re-export for reuse by lib/defaults.mjs
-export { parseFrontmatter };
 
 // --- Constants ---
 

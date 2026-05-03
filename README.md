@@ -11,7 +11,7 @@ A Claude Code plugin to manage [Dougs](https://www.dougs.fr) draft quotes from y
 claude plugin marketplace add alexandrebouchez/dougs-skills
 claude plugin install dougs@dougs-skills --scope user
 
-# 2. Configure your company info (interactive wizard, run from project root)
+# 2. Configure your company info (interactive wizard, run from a project root — not your home dir)
 npx @drivenlabs/dougs
 
 # 3. In Claude Code
@@ -19,6 +19,8 @@ npx @drivenlabs/dougs
 /dougs:list-quotes         # smoke test
 /dougs:create-quote        # create a draft
 ```
+
+> **Note.** The npm package `@drivenlabs/dougs` is published shortly after the GitHub repo goes public. If `npx` returns 404, use the manual setup (see [Configuration](#configuration)) — the marketplace install in step 1 still works.
 
 ## Commands
 
@@ -114,6 +116,10 @@ Merci pour votre confiance !
 ## Late Payment Terms
 Des pénalités de retard au taux de 3 fois le taux d'intérêt légal seront appliquées en cas de non-paiement à la date d'échéance.
 ```
+
+### Windows note
+
+The plugin and wizard run on Node 18+ on macOS, Linux and Windows. CRLF line endings and UTF-8 BOM in `.claude/dougs.local.md` (common with Notepad) are normalized at load time. The `0600` permission on `~/.dougs-session` is a no-op on Windows; the file inherits the user profile ACL instead, which provides equivalent same-user-only access.
 
 ## Authentication
 
@@ -224,6 +230,10 @@ Issues and PRs welcome. Two house rules:
 ## License
 
 MIT — see [LICENSE](./LICENSE).
+
+## Author
+
+Built by [Alexandre Bouchez](https://github.com/alexandrebouchez) at [Drivenlabs](https://drivenlabs.ai). Independent project — not affiliated with Dougs.
 
 ## Related
 
