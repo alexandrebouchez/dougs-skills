@@ -32,6 +32,11 @@ jobs:
         run: |
           mkdir -p /tmp/dougs-ci-smoke
           cd /tmp/dougs-ci-smoke
-          printf "n\n123456\n0.2\nunité\n30\nCI TEST\n\n1 rue Test\n75001 Paris\nSASU\n1000\n12345678901234\nPARIS\n123456789\n6201Z\nFR12 123456789\n+33100000000\nci@test.invalid\nn\n" \
+          # In non-TTY, hasClaudeCli() returns false → install prompt is skipped.
+          # Wizard goes straight to the company config questions. No leading "n".
+          # Trailing "n" is for the .gitignore prompt at the very end.
+          printf "123456\n0.2\nunité\n30\nCI TEST\n\n1 rue Test\n75001 Paris\nSASU\n1000\n12345678901234\nPARIS\n123456789\n6201Z\nFR12 123456789\n+33100000000\nci@test.invalid\nn\n" \
             | node $GITHUB_WORKSPACE/init/bin/cli.mjs
           test -f .claude/dougs.local.md
+          grep -q 'company_id: "123456"' .claude/dougs.local.md
+          grep -q 'CI TEST' .claude/dougs.local.md
