@@ -1,6 +1,8 @@
 # @drivenlabs/dougs
 
-Setup wizard for the [dougs Claude Code plugin](https://github.com/alexandrebouchez/dougs-skills).
+Setup wizard for the [dougs-skills Claude Code plugin](https://github.com/alexandrebouchez/dougs-skills).
+
+> **Disclaimer.** Unofficial, third-party integration. Not affiliated with or endorsed by [Dougs](https://www.dougs.fr). Reverse-engineered against Dougs' internal HTTP API; may break without warning. Use at your own risk on your own Dougs account.
 
 ## Usage
 
@@ -12,9 +14,9 @@ npx @drivenlabs/dougs
 
 The wizard:
 
-1. Installs the dougs plugin via Claude Code marketplace (if `claude` CLI is available).
-2. Prompts for your company info (company_id, legal mentions, contact).
-3. Writes `.claude/dougs.local.md` (gitignored).
+1. Adds the marketplace and installs the dougs plugin (if `claude` CLI is available)
+2. Prompts for your company info (company_id, legal mentions, contact)
+3. Writes `.claude/dougs.local.md` (gitignored)
 
 ## After setup
 
@@ -25,6 +27,10 @@ In Claude Code:
 /dougs:list-quotes        # smoke test
 /dougs:create-quote       # create your first draft
 ```
+
+## See also
+
+- Full plugin documentation: [github.com/alexandrebouchez/dougs-skills](https://github.com/alexandrebouchez/dougs-skills)
 
 ## License
 

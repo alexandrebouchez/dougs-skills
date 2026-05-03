@@ -13,6 +13,8 @@ description: >
 
 # Dougs — Gestion des brouillons de devis
 
+> **Disclaimer.** Plugin **non-officiel**, non affilié à Dougs. Reverse-engineered sur l'API interne de Dougs (`app.dougs.fr`) — peut casser sans préavis. Aucune donnée envoyée ailleurs que vers `app.dougs.fr` (la session de l'utilisateur courant).
+
 Plugin basé sur fetch direct vers l'API interne de Dougs, avec un cookie de session extrait depuis un onglet Chrome authentifié (Google SSO). Aucun appel temps réel ne passe par Chrome MCP — uniquement l'extraction initiale du cookie.
 
 **Principe brouillon-only** : le plugin crée et modifie uniquement des **brouillons (DRAFT)**. Les transitions `DRAFT → PENDING` (émission) et `PENDING → FINALIZED` (validation/signature) restent manuelles dans l'UI Dougs — l'utilisateur garde toujours la main sur ces étapes engageantes.
