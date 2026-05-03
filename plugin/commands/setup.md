@@ -1,46 +1,46 @@
 ---
-description: "Configure the Dougs plugin (company ID, defaults, legal info)"
+description: "Configurer le plugin Dougs (company ID, defaults, infos légales)"
 argument-hint: ""
 ---
 
 # Setup Dougs
 
-## Recommended : npx wizard
+## Recommandé : wizard npx
 
-Run from your project root:
+Depuis la racine de ton projet :
 
 ```bash
 npx @drivenlabs/dougs
 ```
 
-The wizard asks for your company info (company_id, legal mentions, contact) and writes `.claude/dougs.local.md` for you.
+Le wizard te demande tes infos d'entreprise (company_id, mentions légales, contact) et écrit `.claude/dougs.local.md` pour toi.
 
-## Manual setup
+## Setup manuel
 
-If you prefer manual config, copy the template:
+Si tu préfères config manuelle, copier le template :
 
 ```bash
 mkdir -p .claude
 cp "${CLAUDE_PLUGIN_ROOT}/.claude/dougs.local.md.template" .claude/dougs.local.md
 ```
 
-Then edit `.claude/dougs.local.md` and fill in `company_id`, legal info, and contact details. Find your `company_id` in your Dougs URL: `app.dougs.fr/app/c/<ID>/...`.
+Puis éditer `.claude/dougs.local.md` et remplir `company_id`, infos légales et contact. Le `company_id` se trouve dans l'URL Dougs : `app.dougs.fr/app/c/<ID>/...`.
 
-## Initialize the session
+## Initialiser la session
 
-After config, run `/dougs:refresh-session` to extract the Dougs session cookie from your authenticated Chrome tab on `app.dougs.fr`.
+Une fois la config en place, lancer `/dougs:refresh-session` pour extraire le cookie de session depuis l'onglet Chrome authentifié sur `app.dougs.fr`.
 
-## Verify
+## Vérifier
 
 ```bash
 node "${CLAUDE_PLUGIN_ROOT}/bin/dougs.mjs" me --pretty
 ```
 
-Should print the connected email and `preferredCompanyId`. If `SESSION_EXPIRED` → run `/dougs:refresh-session`.
+Doit afficher l'email connecté et `preferredCompanyId`. Si `SESSION_EXPIRED` → lancer `/dougs:refresh-session`.
 
-## Confirm
+## Confirmer
 
 ```
-Dougs configured: [EMAIL] | Company [ID]
-Plugin ready — use /dougs:list-quotes, /dougs:create-quote, etc.
+Dougs configuré : [EMAIL] | Company [ID]
+Plugin prêt — utilise /dougs:list-quotes, /dougs:create-quote, etc.
 ```

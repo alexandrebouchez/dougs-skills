@@ -9,7 +9,7 @@ Modifie un brouillon (DRAFT) ou un devis émis (PENDING). **Refuse les devis FIN
 
 ## Identifier
 
-UUID, numéro ("41"), ou description ("le devis Sa Couleur"). Si pas un UUID, lister via `/dougs:list-quotes` pour trouver l'UUID correspondant.
+UUID, numéro ("41"), ou description ("le devis Acme"). Si pas un UUID, lister via `/dougs:list-quotes` pour trouver l'UUID correspondant.
 
 ## Étape 1 — Charger le devis
 

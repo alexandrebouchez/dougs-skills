@@ -24,7 +24,7 @@ Plugin basé sur fetch direct vers l'API interne de Dougs, avec un cookie de ses
 | `/dougs:setup` | Config initiale (company_id, defaults) + indications session |
 | `/dougs:refresh-session` | Extraire/renouveler le cookie de session |
 | `/dougs:create-quote` | Créer un nouveau brouillon (DRAFT) |
-| `/dougs:edit-quote` | Modifier un brouillon (DRAFT) ou un devis émis (PENDING) |
+| `/dougs:edit-quote` | Modifier un brouillon (DRAFT) ou un devis émis (PENDING — avec avertissement explicite) |
 | `/dougs:list-quotes` | Lister les devis émis (DRAFT exclus de cette liste) |
 | `/dougs:view-quote` | Voir le détail d'un devis |
 | `/dougs:download-quote` | Télécharger le PDF d'un devis (PENDING ou FINALIZED) |

@@ -107,7 +107,7 @@ dougs-skills/
 ├── plugin/                             # the plugin itself
 │   ├── .claude-plugin/plugin.json
 │   ├── .claude/dougs.local.md.template
-│   ├── lib/{auth,api,config,defaults,guardrails,validators}.mjs
+│   ├── lib/{auth,api,config,defaults,guardrails,validators,stdin}.mjs
 │   ├── bin/dougs.mjs                   # CLI dispatcher
 │   ├── commands/                       # slash commands (legacy markdown format)
 │   ├── skills/dougs/SKILL.md           # main skill
