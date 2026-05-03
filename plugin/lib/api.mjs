@@ -83,6 +83,9 @@ export function listCustomers() {
 }
 
 export async function downloadQuotePdf(filePath) {
+  if (typeof filePath !== 'string' || !filePath.startsWith('/') || filePath.includes('://')) {
+    throw new Error(`Invalid PDF path: ${filePath}`);
+  }
   const cookie = loadCookie();
   if (!cookie) throw new SessionExpiredError();
   const res = await fetch(BASE_URL + filePath, {

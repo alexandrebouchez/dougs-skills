@@ -8,6 +8,12 @@ import { readFileSync, existsSync } from 'node:fs';
 import { join, dirname, resolve } from 'node:path';
 
 let cachedConfig = null;
+let cachedCwd = null;
+
+export function clearConfigCache() {
+  cachedConfig = null;
+  cachedCwd = null;
+}
 
 function findLocalMd(startDir = process.cwd()) {
   let dir = resolve(startDir);
@@ -39,8 +45,9 @@ function parseFrontmatter(content) {
 }
 
 export function loadConfig() {
-  if (cachedConfig) return cachedConfig;
-  const path = findLocalMd();
+  const cwd = process.cwd();
+  if (cachedConfig && cachedCwd === cwd) return cachedConfig;
+  const path = findLocalMd(cwd);
   if (!path) {
     throw new Error(
       'Dougs not configured. Run `npx @drivenlabs/dougs` to set up, ' +
@@ -61,8 +68,12 @@ export function loadConfig() {
     defaultExpirationDays: cfg.default_expiration_days ?? 30,
     configPath: path,
   };
+  cachedCwd = cwd;
   return cachedConfig;
 }
+
+// Re-export for reuse by lib/defaults.mjs
+export { parseFrontmatter };
 
 // --- Constants ---
 

@@ -28,7 +28,10 @@ const cmd = args[0];
 
 function flag(name) {
   const i = args.indexOf('--' + name);
-  return i !== -1 ? args[i + 1] : null;
+  if (i === -1) return null;
+  const next = args[i + 1];
+  if (!next || next.startsWith('--')) return null;
+  return next;
 }
 
 function has(name) {

@@ -15,7 +15,7 @@ L'API Dougs distingue trois statuts :
 - `PENDING` — émis, modifiable, PDF généré
 - `FINALIZED` — signé/validé, verrouillé (irréversible)
 
-La transition `DRAFT → PENDING` (et `PENDING → FINALIZED`) passe par un endpoint Dougs `finalize()`. Côté UI, ce bouton « valide le devis comme signé », ce qui est **une action métier engageante**. Pour éviter toute promotion accidentelle, le plugin v1.1+ s'arrête toujours au DRAFT.
+La transition `DRAFT → PENDING` (et `PENDING → FINALIZED`) passe par un endpoint Dougs `finalize()`. Côté UI, ce bouton « valide le devis comme signé », ce qui est **une action métier engageante**. Pour éviter toute promotion accidentelle, le plugin s'arrête toujours au DRAFT.
 
 ## Collecte
 

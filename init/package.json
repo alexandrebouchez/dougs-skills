@@ -16,5 +16,8 @@
     "directory": "init"
   },
   "keywords": ["claude-code", "dougs", "plugin", "setup", "invoicing"],
-  "author": "Alexandre Bouchez"
+  "author": {
+    "name": "Alexandre Bouchez",
+    "url": "https://github.com/alexandrebouchez"
+  }
 }

@@ -5,6 +5,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { SESSION_PATH_ENV, SessionExpiredError } from '../lib/auth.mjs';
 import { dougsFetch, listQuotes } from '../lib/api.mjs';
+import { clearConfigCache } from '../lib/config.mjs';
 
 const TEST_COMPANY_ID = '999999';
 
@@ -13,6 +14,7 @@ let originalCwd;
 beforeEach(() => {
   originalCwd = process.cwd();
   tmpDir = mkdtempSync(join(tmpdir(), 'dougs-test-'));
+  clearConfigCache();
 
   // Session cookie
   const sessionPath = join(tmpDir, 'session');
@@ -32,6 +34,7 @@ beforeEach(() => {
 afterEach(() => {
   process.chdir(originalCwd);
   rmSync(tmpDir, { recursive: true, force: true });
+  clearConfigCache();
 });
 
 test('dougsFetch sends Cookie header from session file', async () => {

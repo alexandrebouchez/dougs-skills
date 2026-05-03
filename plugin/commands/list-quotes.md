@@ -35,7 +35,7 @@ Parser la sortie JSON et présenter :
 ```
 | # | Numéro | Client | Objet | Montant TTC | Statut | Date |
 |---|--------|--------|-------|-------------|--------|------|
-| 1 | 2026-04-DEV41 | SA COULEUR | test | 360€ | PENDING | 2026-04-30 |
+| 1 | 2026-05-DEV42 | ACME SARL | Audit IA | 2400€ | PENDING | 2026-05-03 |
 ```
 
 Trier par date décroissante (plus récent en premier).

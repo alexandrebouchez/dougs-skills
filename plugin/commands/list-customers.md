@@ -14,7 +14,7 @@ node "${CLAUDE_PLUGIN_ROOT}/bin/dougs.mjs" list-customers --pretty
 Avec filtre :
 
 ```bash
-node "${CLAUDE_PLUGIN_ROOT}/bin/dougs.mjs" list-customers --search "SA Couleur" --pretty
+node "${CLAUDE_PLUGIN_ROOT}/bin/dougs.mjs" list-customers --search "ACME" --pretty
 ```
 
 ## Affichage
@@ -22,7 +22,7 @@ node "${CLAUDE_PLUGIN_ROOT}/bin/dougs.mjs" list-customers --search "SA Couleur" 
 ```
 | # | Nom | SIREN | Email | Ville |
 |---|-----|-------|-------|-------|
-| 1 | SA COULEUR ET CONNECTION | 389195207 | f.bertrand@... | TALUYERS |
+| 1 | ACME SARL | 123456789 | contact@acme.fr | PARIS |
 ```
 
 ## Note

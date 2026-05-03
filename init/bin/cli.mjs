@@ -63,6 +63,12 @@ function close() {
   if (rl) rl.close();
 }
 
+process.on('SIGINT', () => {
+  output.write('\n');
+  close();
+  process.exit(130);
+});
+
 function hasClaudeCli() {
   try {
     execSync('claude --version', { stdio: 'ignore' });
