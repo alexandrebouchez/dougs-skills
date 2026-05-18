@@ -9,7 +9,5 @@
   "homepage": "https://github.com/alexbouchez/dougs",
   "repository": "https://github.com/alexbouchez/dougs",
   "license": "MIT",
-  "keywords": ["dougs", "quotes", "invoicing", "claude-code", "brouillon", "brouillon-only", "draft-only", "france", "french-accounting", "comptabilite", "agent-skills"],
-  "skills": "./skills",
-  "commands": "./commands"
+  "keywords": ["dougs", "quotes", "invoicing", "claude-code", "brouillon", "brouillon-only", "draft-only", "france", "french-accounting", "comptabilite", "agent-skills"]
 }

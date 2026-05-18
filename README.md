@@ -179,8 +179,7 @@ The cookie is stored at `~/.dougs-session` (mode `0600`, never committed).
 
 ```
 dougs/
-├── .claude-plugin/marketplace.json     # Claude Code marketplace entry
-├── plugin/                             # the plugin
+├── plugin/                             # the plugin (referenced from alexbouchez/plugins via git-subdir)
 │   ├── .claude-plugin/plugin.json
 │   ├── .claude/dougs.local.md.template
 │   ├── lib/                            # auth, api, config, defaults, guardrails, validators, stdin
