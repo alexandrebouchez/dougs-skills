@@ -1,6 +1,6 @@
 # @drivenlabs/dougs
 
-Setup wizard for the [dougs-skills Claude Code plugin](https://github.com/alexandrebouchez/dougs-skills).
+Setup wizard for the [dougs Claude Code plugin](https://github.com/alexbouchez/dougs).
 
 > **Disclaimer.** Unofficial, third-party integration. Not affiliated with or endorsed by [Dougs](https://www.dougs.fr). Reverse-engineered against Dougs' internal HTTP API; may break without warning. Use at your own risk on your own Dougs account.
 
@@ -30,7 +30,7 @@ In Claude Code:
 
 ## See also
 
-- Full plugin documentation: [github.com/alexandrebouchez/dougs-skills](https://github.com/alexandrebouchez/dougs-skills)
+- Full plugin documentation: [github.com/alexbouchez/dougs](https://github.com/alexbouchez/dougs)
 
 ## License
 

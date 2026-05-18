@@ -9,15 +9,15 @@
   "files": ["bin", "README.md"],
   "engines": { "node": ">=18" },
   "license": "MIT",
-  "homepage": "https://github.com/alexandrebouchez/dougs-skills",
+  "homepage": "https://github.com/alexbouchez/dougs",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/alexandrebouchez/dougs-skills.git",
+    "url": "git+https://github.com/alexbouchez/dougs.git",
     "directory": "init"
   },
   "keywords": ["claude-code", "dougs", "plugin", "setup", "invoicing"],
   "author": {
     "name": "Alexandre Bouchez",
-    "url": "https://github.com/alexandrebouchez"
+    "url": "https://github.com/alexbouchez"
   }
 }

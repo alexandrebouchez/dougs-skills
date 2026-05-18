@@ -1,4 +1,4 @@
-# dougs-skills
+# dougs
 
 A Claude Code plugin to manage [Dougs](https://www.dougs.fr) draft quotes from your terminal. Direct API calls (~100ms), brouillon-only, with strict guardrails.
 
@@ -8,8 +8,8 @@ A Claude Code plugin to manage [Dougs](https://www.dougs.fr) draft quotes from y
 
 ```bash
 # 1. Install the plugin (Claude Code marketplace)
-claude plugin marketplace add alexandrebouchez/dougs-skills
-claude plugin install dougs@dougs-skills --scope user
+claude plugin marketplace add alexbouchez/dougs
+claude plugin install dougs@dougs --scope user
 
 # 2. Configure your company info (interactive wizard, run from a project root — not your home dir)
 npx @drivenlabs/dougs
@@ -62,8 +62,8 @@ The plugin enforces this in code: `create-quote` forces `status: 'DRAFT'` in eve
 ### Method 1 — Claude Code marketplace (standard)
 
 ```bash
-claude plugin marketplace add alexandrebouchez/dougs-skills
-claude plugin install dougs@dougs-skills --scope user
+claude plugin marketplace add alexbouchez/dougs
+claude plugin install dougs@dougs --scope user
 ```
 
 ### Method 2 — npx wizard (one-shot install + setup)
@@ -82,7 +82,7 @@ The wizard:
 ### Method 3 — Vercel Labs `npx skills` (universal)
 
 ```bash
-npx skills add alexandrebouchez/dougs-skills
+npx skills add alexbouchez/dougs
 ```
 
 This works for any agent supporting the [Agent Skills specification](https://agentskills.io) — Claude Code, OpenCode, Cursor, etc.
@@ -95,7 +95,7 @@ In the Claude Desktop app:
 2. Click **Customize** in the left sidebar
 3. Click **Browse plugins** → **Personal**
 4. Click the **+** button → **Add marketplace from GitHub**
-5. Enter the URL: `https://github.com/alexandrebouchez/dougs-skills`
+5. Enter the URL: `https://github.com/alexbouchez/dougs`
 6. Install the `dougs` plugin
 
 The skill activates automatically. If it doesn't appear after install (known issue [#39400](https://github.com/anthropics/claude-code/issues/39400) on marketplace mounting in some Cowork builds), upload the `plugin/` folder as a zip via the same Browse plugins screen.
@@ -178,7 +178,7 @@ The cookie is stored at `~/.dougs-session` (mode `0600`, never committed).
 ## Architecture
 
 ```
-dougs-skills/
+dougs/
 ├── .claude-plugin/marketplace.json     # Claude Code marketplace entry
 ├── plugin/                             # the plugin
 │   ├── .claude-plugin/plugin.json
@@ -265,7 +265,7 @@ MIT — see [LICENSE](./LICENSE).
 
 ## Author
 
-Built by [Alexandre Bouchez](https://github.com/alexandrebouchez) at [Drivenlabs](https://drivenlabs.ai). Independent project — not affiliated with Dougs.
+Built by [Alexandre Bouchez](https://github.com/alexbouchez) at [Drivenlabs](https://drivenlabs.ai). Independent project — not affiliated with Dougs.
 
 ## Related
 

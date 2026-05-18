@@ -4,10 +4,10 @@
   "description": "Manage Dougs draft quotes via direct fetch + session cookie. Single `/dougs` command with internal routing dispatcher. Brouillon-only — no auto-finalization. Configurable per-project via .claude/dougs.local.md.",
   "author": {
     "name": "Alexandre Bouchez",
-    "url": "https://github.com/alexandrebouchez"
+    "url": "https://github.com/alexbouchez"
   },
-  "homepage": "https://github.com/alexandrebouchez/dougs-skills",
-  "repository": "https://github.com/alexandrebouchez/dougs-skills",
+  "homepage": "https://github.com/alexbouchez/dougs",
+  "repository": "https://github.com/alexbouchez/dougs",
   "license": "MIT",
   "keywords": ["dougs", "quotes", "invoicing", "claude-code", "brouillon", "brouillon-only", "draft-only", "france", "french-accounting", "comptabilite", "agent-skills"],
   "skills": "./skills",

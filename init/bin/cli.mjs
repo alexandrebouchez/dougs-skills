@@ -16,8 +16,8 @@ import { mkdirSync, writeFileSync, existsSync, readFileSync, appendFileSync } fr
 import { join, resolve } from 'node:path';
 import { homedir } from 'node:os';
 
-const REPO = 'alexandrebouchez/dougs-skills';
-const MARKETPLACE = 'dougs-skills';
+const REPO = 'alexbouchez/dougs';
+const MARKETPLACE = 'dougs';
 const PLUGIN_NAME = 'dougs';
 
 let rl = null;

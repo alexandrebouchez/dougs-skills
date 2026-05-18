@@ -36,6 +36,6 @@ All notable changes to this project are documented here. Format: [Keep a Changel
 - npx wizard (`@drivenlabs/dougs`) for one-command install + setup
 - 30 tests covering session I/O, fetch wrapper, guardrails, config, defaults, edge cases (CRLF, BOM, escaped quotes)
 
-[Unreleased]: https://github.com/alexandrebouchez/dougs-skills/compare/v0.2.0...HEAD
-[0.2.0]: https://github.com/alexandrebouchez/dougs-skills/compare/v0.1.0...v0.2.0
-[0.1.0]: https://github.com/alexandrebouchez/dougs-skills/releases/tag/v0.1.0
+[Unreleased]: https://github.com/alexbouchez/dougs/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/alexbouchez/dougs/compare/v0.1.0...v0.2.0
+[0.1.0]: https://github.com/alexbouchez/dougs/releases/tag/v0.1.0
